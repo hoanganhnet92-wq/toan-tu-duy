@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#2f7d6d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Toán tư duy">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Toán tư duy cho bé 4 tuổi – Lộ trình 7 ngày</title>
 <style>
 :root{
@@ -289,6 +296,7 @@ document.getElementById("tabs").addEventListener("click", function(e){
   var b = e.target.closest(".tab"); if(b) go(parseInt(b.getAttribute("data-i"),10));
 });
 renderAll();
+if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
 </script>
 </body>
 </html>
