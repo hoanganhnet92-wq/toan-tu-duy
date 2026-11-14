@@ -11,290 +11,353 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Toán tư duy">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Toán tư duy cho bé 4 tuổi – Lộ trình 7 ngày</title>
+<title>Toán tư duy cho bé 4 tuổi – Lộ trình 4 tuần</title>
 <style>
 :root{
   --bg:#f6f3ec; --card:#ffffff; --ink:#23302d; --muted:#667570;
   --brand:#2f7d6d; --brand-soft:#e1f0ec; --gold:#c98a12; --gold-soft:#fbf0d6;
-  --line:#e3ded2; --radius:16px;
+  --red:#b4513f; --red-soft:#f8e6e1; --line:#e3ded2; --radius:16px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{font-size:17px}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.55;padding-bottom:env(safe-area-inset-bottom)}
-header{background:var(--brand);color:#fff;padding:18px 16px 14px}
-header h1{margin:0;font-size:1.2rem;line-height:1.3}
-header p{margin:4px 0 0;font-size:.85rem;opacity:.9}
-.wrap{max-width:720px;margin:0 auto;padding:0 14px}
-.progress{margin-top:12px}
-.bar{height:10px;background:rgba(255,255,255,.25);border-radius:99px;overflow:hidden}
+button,input,textarea{font:inherit;color:inherit}
+header{background:var(--brand);color:#fff;padding:16px 16px 12px}
+header h1{margin:0;font-size:1.15rem;line-height:1.3}
+header p{margin:2px 0 0;font-size:.82rem;opacity:.9}
+.wrap{max-width:720px;margin:0 auto}
+.bar{height:10px;background:rgba(255,255,255,.25);border-radius:99px;overflow:hidden;margin-top:10px}
 .bar>i{display:block;height:100%;background:#ffd36b;width:0;transition:width .3s}
-.stats{display:flex;justify-content:space-between;font-size:.8rem;margin-top:6px;opacity:.95}
-.tabs{display:flex;gap:6px;overflow-x:auto;padding:12px 14px 4px;max-width:720px;margin:0 auto;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{flex:0 0 auto;min-width:52px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:6px 8px;text-align:center;font:inherit;font-size:.78rem;color:var(--ink);cursor:pointer;position:relative}
-.tab b{display:block;font-size:.95rem}
-.tab.active{border-color:var(--brand);background:var(--brand-soft);box-shadow:0 0 0 1px var(--brand) inset}
-.tab.today::after{content:"";position:absolute;top:4px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
-.tab .mark{display:block;font-size:.7rem;color:var(--muted);height:1em}
-.tab.full .mark{color:var(--brand);font-weight:700}
-main{max-width:720px;margin:0 auto;padding:10px 14px 40px}
+.stats{display:flex;justify-content:space-between;gap:8px;font-size:.78rem;margin-top:6px;opacity:.95}
+.weeks{display:flex;gap:6px;max-width:720px;margin:0 auto;padding:12px 14px 0}
+.wk{flex:1;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:8px 4px;font-size:.82rem;cursor:pointer;text-align:center}
+.wk.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+.days{display:flex;gap:6px;max-width:720px;margin:0 auto;padding:8px 14px 2px}
+.dy{flex:1;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:5px 2px;text-align:center;font-size:.72rem;cursor:pointer;position:relative}
+.dy b{display:block;font-size:.95rem}
+.dy .mk{display:block;height:1.1em;font-size:.72rem;font-weight:700}
+.dy.active{border-color:var(--brand);background:var(--brand-soft);box-shadow:0 0 0 1px var(--brand) inset}
+.dy.pass .mk{color:var(--brand)} .dy.redo .mk{color:var(--red)}
+.dy.today::after{content:"";position:absolute;top:4px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+main{max-width:720px;margin:0 auto;padding:6px 14px 40px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-top:10px}
-.day-title{margin:0;font-size:1.15rem;line-height:1.3}
-.badge{display:inline-block;font-size:.72rem;background:var(--gold-soft);color:#7a5200;border-radius:99px;padding:2px 10px;margin-bottom:6px}
-.goal{color:var(--muted);margin:6px 0 0;font-size:.92rem}
+.head{display:flex;gap:10px;align-items:flex-start}
+.head h2{margin:0;font-size:1.15rem;line-height:1.3;flex:1}
+.star{border:1px solid var(--line);background:#fff;border-radius:12px;width:44px;height:44px;font-size:1.3rem;cursor:pointer;flex:0 0 auto;color:#b9b2a0}
+.star.on{color:var(--gold);background:var(--gold-soft);border-color:var(--gold)}
+.badge{display:inline-block;font-size:.72rem;background:var(--gold-soft);color:#7a5200;border-radius:99px;padding:2px 10px;margin:0 4px 6px 0}
+.badge.area{background:var(--brand-soft);color:#1d5a4d}
+.goal{color:var(--muted);margin:8px 0 0;font-size:.92rem}
 h3{margin:16px 0 6px;font-size:.95rem;color:var(--brand)}
-ol,ul{margin:0;padding-left:1.2rem}
-li{margin:4px 0}
-.ask{background:var(--brand-soft);border-radius:12px;padding:10px 12px;margin-top:6px}
-.ask li{margin:3px 0}
-.tip{background:var(--gold-soft);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:.92rem}
-.checks{display:grid;gap:10px;margin-top:4px}
+ol,ul{margin:0;padding-left:1.2rem} li{margin:4px 0}
+.ask{background:var(--brand-soft);border-radius:12px;padding:10px 12px}
+.lv{display:grid;gap:8px}
+.lv div{border-radius:12px;padding:10px 12px;font-size:.92rem}
+.lv .e{background:#eef4fb} .lv .h{background:var(--gold-soft)}
+.src{font-size:.78rem;color:var(--muted);margin-top:12px}
+.src a{color:var(--brand)}
+.checks{display:grid;gap:10px}
 .check{display:flex;gap:12px;align-items:flex-start;border:2px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;background:#fff}
 .check input{width:26px;height:26px;margin:2px 0 0;accent-color:var(--brand);flex:0 0 auto}
 .check.on{border-color:var(--brand);background:var(--brand-soft)}
 .check strong{display:block}
 .check small{color:var(--muted);display:block;font-size:.82rem;line-height:1.4;margin-top:2px}
+.redo-note{background:var(--red-soft);color:#7c2f22;border-radius:12px;padding:10px 12px;font-size:.88rem}
+textarea{width:100%;min-height:76px;border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff;resize:vertical}
 .nav{display:flex;gap:10px;margin-top:14px}
-.nav button,.tools button,.tools input{font:inherit}
-.nav button{flex:1;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px;cursor:pointer;color:var(--ink)}
-.nav button:disabled{opacity:.4}
-.tools{margin-top:18px;padding:14px;border:1px dashed var(--line);border-radius:14px;font-size:.85rem;color:var(--muted)}
-.tools label{display:block;margin-bottom:8px}
-.tools input[type=date]{padding:6px 8px;border:1px solid var(--line);border-radius:8px;margin-left:6px}
-.tools button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;margin-right:6px;margin-top:4px}
-.tools button.danger{color:#a33}
-.note{font-size:.78rem;color:var(--muted);margin-top:14px}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:11px 12px;cursor:pointer}
+.nav .btn{flex:1}
+.btn:disabled{opacity:.4}
+.btn.danger{color:var(--red)}
+.pick{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;margin-top:8px;cursor:pointer}
+.pick small{display:block;color:var(--muted);font-size:.8rem}
+details{margin-top:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
+summary{cursor:pointer;font-weight:600;color:var(--brand)}
+table{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:6px}
+th,td{text-align:left;padding:7px 4px;border-bottom:1px solid var(--line)}
+td.n,th.n{text-align:center;width:4.2em}
+.meter{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:4px}
+.meter i{display:block;height:100%;background:var(--brand)}
+.muted{color:var(--muted);font-size:.85rem}
+.tools label{display:block;margin:8px 0}
+.tools input[type=date]{padding:6px 8px;border:1px solid var(--line);border-radius:8px;margin-left:6px;background:#fff}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 </style>
 </head>
 <body>
 <header>
   <div class="wrap">
     <h1>Toán tư duy cho bé 4 tuổi</h1>
-    <p>Lộ trình 7 ngày · mỗi ngày 10–15 phút · học qua chơi</p>
-    <div class="progress">
-      <div class="bar"><i id="bar"></i></div>
-      <div class="stats"><span id="sPlayed"></span><span id="sPassed"></span></div>
-    </div>
+    <p>Lộ trình 4 tuần · mỗi ngày 10–15 phút · chơi bằng đồ thật</p>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="stats"><span id="sPlayed"></span><span id="sPassed"></span><span id="sRedo"></span></div>
   </div>
 </header>
-
-<nav class="tabs" id="tabs" aria-label="Chọn ngày"></nav>
+<nav class="weeks" id="weeks" aria-label="Chọn tuần"></nav>
+<nav class="days" id="days" aria-label="Chọn ngày"></nav>
 <main id="main"></main>
 
+<script src="data.js"></script>
 <script>
 "use strict";
-var DAYS = [
- {
-  name:"Thứ 2", title:"Số là “bao nhiêu” chứ không chỉ là tên",
-  goal:"Bé hiểu số cuối khi đếm là tổng số lượng, và biết số lượng không đổi dù xếp khác đi.",
-  mats:"7–10 viên bi (hạt, nút áo, hoặc thìa), 1 cái khăn hoặc cốc úp.",
-  steps:[
-   "Đặt 7 viên bi thành một hàng. Cho bé đếm và hỏi “Có tất cả mấy viên?”.",
-   "Xếp lại 7 viên thành vòng tròn rồi hỏi lại “Bây giờ có mấy viên?” (không đếm lại cũng được).",
-   "Dùng khăn che 2–3 viên khi bé nhìn thấy. Hỏi “Còn mấy viên?”. Mở khăn ra để bé kiểm tra.",
-   "Đổi vai: bé che, bố mẹ đoán."
-  ],
-  ask:["Con làm sao biết còn mấy viên?","Nếu mình xếp thành hàng dài hơn thì có nhiều bi hơn không?"],
-  tip:"Nếu bé đếm lại từ 1 mỗi lần cũng bình thường. Thử số nhỏ hơn (3–5) trước rồi tăng dần.",
-  passTxt:"Bé nói đúng số còn lại sau khi che bớt, ít nhất 4/5 lần với số trong phạm vi 7, và biết số không đổi khi xếp lại."
- },
- {
-  name:"Thứ 3", title:"Tách và ghép số",
-  goal:"Bé thấy một số có thể tách thành hai phần bằng nhiều cách (nền tảng của phép cộng).",
-  mats:"10 hạt (hoặc bi), 2 cái cốc hoặc 2 cái đĩa.",
-  steps:[
-   "Đặt 5 hạt trước mặt bé. Nói “Mình chia 5 hạt vào 2 cốc nhé”.",
-   "Cho bé tự bỏ hạt vào 2 cốc. Mỗi lần xong, hỏi “Cốc này mấy, cốc kia mấy, tất cả là mấy?”.",
-   "Hỏi “Còn cách chia nào khác không?”. Ghi lại bằng hạt: 0+5, 1+4, 2+3…",
-   "Nếu bé làm tốt, chuyển sang 10 hạt và làm tương tự."
-  ],
-  ask:["Con chia thế nào? Còn cách nào khác không?","Cốc kia có mấy hạt, con đoán xem?"],
-  tip:"Không cần dạy ký hiệu cộng. Chỉ cần bé nói được “2 và 3 là 5”.",
-  passTxt:"Bé tự tìm được ít nhất 3 cách chia 5 hạt (hoặc 3 cách chia 10 hạt) và nói đúng tổng."
- },
- {
-  name:"Thứ 4", title:"Cộng qua câu chuyện",
-  goal:"Bé biết thêm vào nghĩa là gộp lại, và tự làm ra đáp án bằng đồ vật.",
-  mats:"Đồ chơi nhỏ (xe, thú nhựa…), quả thật như cam, bánh.",
-  steps:[
-   "Kể: “Con có 3 chiếc xe, bạn cho thêm 2 chiếc. Giờ con có mấy chiếc?”. Để bé tự bày xe ra và đếm.",
-   "Thêm 2–3 bài nữa trong phạm vi 10 (ví dụ 4+3, 5+2, 6+1).",
-   "Đổi vai: để bé tự bịa một câu chuyện cộng và hỏi bố mẹ.",
-   "Có thể cố tình đáp sai một lần để bé phát hiện và sửa."
-  ],
-  ask:["Con làm thế nào mà biết?","Trước khi bạn cho thêm con có mấy chiếc, sau đó mấy chiếc?"],
-  tip:"Chưa cần bé đếm nhẩm trong đầu. Dùng đồ vật làm đáp án là đạt mục tiêu rồi.",
-  passTxt:"Bé giải đúng ít nhất 3/4 bài toán truyện (trong phạm vi 10) bằng đồ vật, và tự ra được một đề."
- },
- {
-  name:"Thứ 5", title:"Nhiều hơn, ít hơn bao nhiêu",
-  goal:"Bé so sánh hai nhóm bằng cách ghép cặp một-một và nói được chênh lệch.",
-  mats:"2 nhóm xe hoặc thú nhựa (ví dụ 6 xe đỏ, 4 xe xanh), hoặc 2 loại nút áo.",
-  steps:[
-   "Đặt 2 hàng xe song song, hỏi “Hàng nào nhiều hơn?” trước khi đếm. Cho bé đoán.",
-   "Ghép từng xe đỏ với một xe xanh theo cặp. Hỏi “Còn xe nào không có cặp?”.",
-   "Hỏi “Hàng đỏ nhiều hơn hàng xanh mấy xe?”. Đếm số xe lẻ để kiểm tra.",
-   "Lặp lại với số khác (chênh lệch 1–3 xe là đủ)."
-  ],
-  ask:["Con thấy hàng nào nhiều hơn? Con kiểm tra bằng cách nào?","Phải thêm mấy xe xanh thì hai hàng bằng nhau?"],
-  tip:"Thử xếp hàng ít hơn thưa ra cho trông dài hơn để xem bé có bị đánh lừa không, rồi cùng ghép cặp để kiểm tra.",
-  passTxt:"Bé ghép cặp đúng, nói được hàng nào nhiều hơn và nhiều hơn mấy (chênh lệch trong phạm vi 5)."
- },
- {
-  name:"Thứ 6", title:"Quy luật (pattern)",
-  goal:"Bé nhận ra và tiếp nối quy luật lặp lại, rồi tự tạo quy luật mới.",
-  mats:"Hạt hoặc khối lego 2–3 màu, hoặc nút áo, lá cây.",
-  steps:[
-   "Xếp mẫu ABAB (đỏ–xanh–đỏ–xanh). Hỏi “Tiếp theo là gì?” và để bé nối tiếp.",
-   "Nâng lên AABAAB (đỏ–đỏ–xanh–đỏ–đỏ–xanh), sau đó ABC nếu bé thích.",
-   "Đổi vai: bé tạo mẫu, bố mẹ đoán (cố tình đoán sai một lần để bé sửa).",
-   "Tìm quy luật quanh nhà: sọc áo, gạch lát, nhịp vỗ tay."
-  ],
-  ask:["Con thấy cái gì lặp lại?","Con đoán cái thứ 10 là màu gì?"],
-  tip:"Có thể dùng nhịp vỗ tay (vỗ–vỗ–dậm) để chơi quy luật bằng âm thanh.",
-  passTxt:"Bé nối tiếp đúng mẫu ABAB và AABAAB, và tự tạo ít nhất một mẫu của riêng mình."
- },
- {
-  name:"Thứ 7", title:"Hình và không gian",
-  goal:"Bé dùng được các từ chỉ vị trí và nhận ra hình khối quanh mình.",
-  mats:"Một món đồ chơi để giấu, các khối hình hoặc đồ vật tròn, vuông, tam giác trong nhà.",
-  steps:[
-   "Chơi “kho báu”: giấu đồ chơi, chỉ dẫn từng bước như “Đi 3 bước, rẽ trái, nhìn dưới cái ghế”.",
-   "Đổi vai: bé giấu và chỉ dẫn cho bố mẹ, bé dùng từ trên, dưới, trong, cạnh, trước, sau.",
-   "Săn hình khối: tìm 3 vật hình tròn, 3 vật hình vuông/chữ nhật quanh nhà.",
-   "Cho bé xếp các khối hình thành ngôi nhà hoặc con vật, rồi gọi tên các hình đã dùng."
-  ],
-  ask:["Con đang đứng ở đâu so với cái ghế?","Vì sao con chọn hình này cho mái nhà?"],
-  tip:"Nếu bé lẫn trái/phải thì dùng từ khác như “phía cửa”, “phía cửa sổ” trước.",
-  passTxt:"Bé làm theo 3 chỉ dẫn vị trí liên tiếp và gọi tên đúng ít nhất 2 hình (tròn, vuông, tam giác…)."
- },
- {
-  name:"Chủ nhật", title:"Giải quyết vấn đề và ôn lại",
-  goal:"Bé vận dụng tổng hợp để giải một tình huống thật và giải thích cách nghĩ.",
-  mats:"8 miếng bánh (hoặc bi, nho), 2–4 chiếc đĩa, đồ chơi hình người hoặc thú.",
-  steps:[
-   "Kể: “Có 8 miếng bánh, chia đều cho 2 bạn. Mỗi bạn được mấy miếng?”. Cho bé tự chia từng miếng một.",
-   "Hỏi tiếp “Nếu có 4 bạn thì sao?”. Chia lại bằng đồ vật.",
-   "Hỏi “Con làm thế nào mà biết?” và để bé giải thích bằng lời hoặc làm lại cho xem.",
-   "Cuối buổi, cho bé tự chọn lại một trò yêu thích trong tuần để chơi."
-  ],
-  ask:["Vì sao con chia như vậy?","Nếu thừa một miếng thì mình làm gì?"],
-  tip:"Nếu bé chia chưa đều, đừng sửa ngay. Hỏi “Hai bạn đã có bằng nhau chưa?” để bé tự kiểm tra.",
-  passTxt:"Bé chia đều 8 cho 2 bạn (và thử với 4 bạn) và nói được cách mình làm."
- }
-];
-
-var KEY = "toan-tu-duy-v1";
+var N = 28, KEY = "toan-tu-duy-v2";
 var state = load();
+var view = "day";            // "day" | "sum"
 var current = initialDay();
 
+function blank(){ return {start:"", played:zeros(), passed:zeros(), fav:zeros(), notes:{}}; }
+function zeros(){ var a=[]; for(var i=0;i<N;i++) a.push(0); return a; }
+function valid(s){ return s && Array.isArray(s.played) && s.played.length===N && Array.isArray(s.passed) && s.passed.length===N && Array.isArray(s.fav) && s.fav.length===N; }
 function load(){
   try{
     var s = JSON.parse(localStorage.getItem(KEY) || "null");
-    if(s && s.played && s.passed) return s;
-  }catch(e){}
-  return {played:[0,0,0,0,0,0,0], passed:[0,0,0,0,0,0,0], start:""};
+    if(valid(s)){ if(!s.notes) s.notes = {}; return s; }
+    var old = JSON.parse(localStorage.getItem("toan-tu-duy-v1") || "null");
+    var b = blank(); if(old && old.start) b.start = old.start; return b;
+  }catch(e){ return blank(); }
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
 
-function daysSinceStart(){
-  if(!state.start) return null;
-  var a = new Date(state.start+"T00:00:00");
-  var b = new Date(); b.setHours(0,0,0,0);
-  return Math.round((b-a)/86400000);
-}
+/* ----- cấu trúc ngày ----- */
+function kind(d){ var p = d%7; return p<5 ? "game" : (p===5 ? "replay" : "review"); }
+function gameOf(d){ return kind(d)==="game" ? GAMES[Math.floor(d/7)*5 + d%7] : null; }
+function gameDays(){ var a=[]; for(var d=0;d<N;d++) if(kind(d)==="game") a.push(d); return a; }
+function needsRedo(d){ return kind(d)==="game" && state.played[d] && !state.passed[d]; }
 function todayIndex(){
-  var d = daysSinceStart();
-  return (d!==null && d>=0 && d<7) ? d : null;
+  if(!state.start) return null;
+  var a = new Date(state.start+"T00:00:00"), b = new Date(); b.setHours(0,0,0,0);
+  var n = Math.round((b-a)/86400000);
+  return (n>=0 && n<N) ? n : null;
+}
+/* Thứ thật của ngày d, tính từ ngày bắt đầu; chưa đặt ngày bắt đầu thì ghi loại ngày */
+function dowLabel(d){
+  if(state.start){
+    var x = new Date(state.start+"T00:00:00"); x.setDate(x.getDate()+d);
+    if(!isNaN(x)) return ["CN","T2","T3","T4","T5","T6","T7"][x.getDay()];
+  }
+  var k = kind(d); return k==="game" ? "Trò" : (k==="replay" ? "Lại" : "Ôn");
 }
 function initialDay(){
-  var t = todayIndex();
-  if(t!==null) return t;
-  for(var i=0;i<7;i++){ if(!state.passed[i]) return i; }
+  var t = todayIndex(); if(t!==null) return t;
+  for(var d=0;d<N;d++){ if(!state.played[d]) return d; }
   return 0;
 }
 
-function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-function li(arr){ return arr.map(function(x){return "<li>"+esc(x)+"</li>";}).join(""); }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function li(a){ return a.map(function(x){ return "<li>"+esc(x)+"</li>"; }).join(""); }
+function count(arr, days){ return days.reduce(function(n,d){ return n + (arr[d]?1:0); }, 0); }
 
-function renderTabs(){
-  var t = todayIndex();
-  var h = "";
-  DAYS.forEach(function(d,i){
-    var cls = "tab"+(i===current?" active":"")+(i===t?" today":"")+(state.passed[i]?" full":"");
-    var mark = state.passed[i] ? "✓✓" : (state.played[i] ? "✓" : "");
-    h += '<button class="'+cls+'" data-i="'+i+'"><span class="mark">'+mark+'</span><b>'+(i+1)+'</b>'+esc(d.name)+'</button>';
-  });
-  document.getElementById("tabs").innerHTML = h;
+/* ----- thanh trên ----- */
+function renderTop(){
+  var gd = gameDays(), played = count(state.played, gd), passed = count(state.passed, gd);
+  var redo = gd.filter(needsRedo).length;
+  document.getElementById("sPlayed").textContent = "Đã chơi "+played+"/"+gd.length;
+  document.getElementById("sPassed").textContent = "Đạt "+passed+"/"+gd.length;
+  document.getElementById("sRedo").textContent = "Cần chơi lại "+redo;
+  document.getElementById("bar").style.width = Math.round(passed/gd.length*100)+"%";
+
+  var w = Math.floor(current/7), h = "";
+  for(var i=0;i<4;i++) h += '<button class="wk'+(view==="day"&&i===w?" active":"")+'" data-w="'+i+'">Tuần '+(i+1)+'</button>';
+  h += '<button class="wk'+(view==="sum"?" active":"")+'" data-w="sum">Tổng kết</button>';
+  document.getElementById("weeks").innerHTML = h;
+
+  var t = todayIndex(), g = "";
+  if(view==="day"){
+    for(var p=0;p<7;p++){
+      var d = w*7+p, cls = "dy", mk = "";
+      if(d===current) cls += " active";
+      if(d===t) cls += " today";
+      if(kind(d)==="game"){
+        if(state.passed[d]){ cls += " pass"; mk = "✓✓"; }
+        else if(state.played[d]){ cls += " redo"; mk = "↻"; }
+      } else if(state.played[d]){ cls += " pass"; mk = "✓"; }
+      g += '<button class="'+cls+'" data-d="'+d+'"><span class="mk">'+mk+'</span><b>'+(d+1)+'</b>'+dowLabel(d)+'</button>';
+    }
+  }
+  document.getElementById("days").innerHTML = g;
 }
 
-function renderStats(){
-  var p = state.played.reduce(function(a,b){return a+b;},0);
-  var q = state.passed.reduce(function(a,b){return a+b;},0);
-  document.getElementById("sPlayed").textContent = "Đã chơi: "+p+"/7";
-  document.getElementById("sPassed").textContent = "Đạt yêu cầu: "+q+"/7";
-  document.getElementById("bar").style.width = Math.round(q/7*100)+"%";
+/* ----- trang ngày ----- */
+function checksHtml(d, withPass, passTxt){
+  var h = '<div class="checks">'
+    + '<label class="check'+(state.played[d]?' on':'')+'"><input type="checkbox" id="cPlayed"'+(state.played[d]?' checked':'')+'><span><strong>Đã chơi</strong><small>Tích sau khi hai bố con/mẹ con chơi xong.</small></span></label>';
+  if(withPass){
+    h += '<label class="check'+(state.passed[d]?' on':'')+'"><input type="checkbox" id="cPassed"'+(state.passed[d]?' checked':'')+'><span><strong>Bé đạt yêu cầu</strong><small>'+esc(passTxt)+'</small></span></label>';
+    if(needsRedo(d)) h += '<div class="redo-note">Trò này đang ở trạng thái <b>cần chơi lại</b>. Nó sẽ tự hiện trong ngày ôn cuối tuần. Chưa đạt là bình thường, không cần ép bé.</div>';
+  }
+  return h + '</div>';
 }
-
+function notesHtml(d){
+  return '<h3>Ghi chú của bố mẹ</h3><textarea id="note" placeholder="Ví dụ: con hay nhầm khi che 3 viên, con thích phần đổi vai…">'+esc(state.notes[d]||"")+'</textarea>';
+}
+function pickBtn(d){
+  var g = gameOf(d);
+  return '<button class="pick" data-go="'+d+'"><b>Ngày '+(d+1)+': '+esc(g.title)+'</b><small>'+esc(AREAS[g.area])+'</small></button>';
+}
 function renderDay(){
-  var d = DAYS[current], t = todayIndex();
-  var badge = (current===t) ? "Hôm nay · Ngày "+(current+1) : "Ngày "+(current+1)+" · "+d.name;
-  var h = '<div class="card">'
-   + '<span class="badge">'+esc(badge)+'</span>'
-   + '<h2 class="day-title">'+esc(d.title)+'</h2>'
-   + '<p class="goal"><b>Mục tiêu:</b> '+esc(d.goal)+'</p>'
-   + '<h3>Chuẩn bị</h3><div>'+esc(d.mats)+'</div>'
-   + '<h3>Cách chơi</h3><ol>'+li(d.steps)+'</ol>'
-   + '<h3>Câu hỏi nên hỏi bé</h3><div class="ask"><ul>'+li(d.ask)+'</ul></div>'
-   + '<div class="tip"><b>Lưu ý:</b> '+esc(d.tip)+'</div>'
-   + '</div>'
-   + '<div class="card"><h3 style="margin-top:0">Theo dõi</h3><div class="checks">'
-   + '<label class="check'+(state.played[current]?' on':'')+'"><input type="checkbox" id="cPlayed"'+(state.played[current]?' checked':'')+'><span><strong>Đã chơi trò này</strong><small>Tích sau khi hai bố con/mẹ con đã chơi xong.</small></span></label>'
-   + '<label class="check'+(state.passed[current]?' on':'')+'"><input type="checkbox" id="cPassed"'+(state.passed[current]?' checked':'')+'><span><strong>Bé đạt yêu cầu</strong><small>'+esc(d.passTxt)+'</small></span></label>'
-   + '</div></div>'
-   + '<div class="nav"><button id="prev"'+(current===0?' disabled':'')+'>← Ngày trước</button><button id="next"'+(current===6?' disabled':'')+'>Ngày sau →</button></div>';
+  var d = current, w = Math.floor(d/7), k = kind(d), t = todayIndex(), h = "";
+  var lead = (d===t ? "Hôm nay · " : "") + "Tuần "+(w+1)+" · Ngày "+(d+1);
 
-  var tools = '<div class="tools"><label>Ngày bắt đầu lộ trình (để đánh dấu “hôm nay”): <input type="date" id="start" value="'+esc(state.start)+'"></label>'
-   + '<button id="btnToday">Bắt đầu từ hôm nay</button>'
-   + '<button class="danger" id="btnReset">Xóa tiến độ</button>'
-   + '<div class="note">Tiến độ được lưu ngay trên trình duyệt của thiết bị này. Đổi điện thoại hoặc xóa dữ liệu trình duyệt thì sẽ mất. Tiêu chí “đạt” là gợi ý để tham khảo, bố mẹ có thể điều chỉnh theo bé. Nếu bé chưa đạt, cứ chơi lại vào ngày khác.</div></div>';
-  document.getElementById("main").innerHTML = h + tools;
-  bind();
+  if(d%7===0){
+    h += '<details><summary>Tuần '+(w+1)+': '+esc(WEEKS[w].title)+' · đồ cần chuẩn bị</summary>'
+      + '<p class="muted">Theo các khối White Rose Reception: '+esc(WEEKS[w].wr)+'</p><ul>'+li(WEEKS[w].mats)+'</ul></details>';
+  }
+
+  if(k==="game"){
+    var g = gameOf(d);
+    h += '<div class="card"><span class="badge">'+esc(lead)+'</span><span class="badge area">'+esc(AREAS[g.area])+'</span>'
+      + '<div class="head"><h2>'+esc(g.title)+'</h2><button class="star'+(state.fav[d]?' on':'')+'" id="fav" aria-label="Bé thích trò này" title="Bé thích trò này">★</button></div>'
+      + '<p class="goal"><b>Mục tiêu:</b> '+esc(g.goal)+'</p>'
+      + '<h3>Chuẩn bị</h3><div>'+esc(g.mats)+'</div>'
+      + '<h3>Cách chơi</h3><ol>'+li(g.steps)+'</ol>'
+      + '<h3>Câu hỏi nên hỏi bé</h3><div class="ask"><ul>'+li(g.ask)+'</ul></div>'
+      + '<h3>Điều chỉnh mức độ</h3><div class="lv"><div class="e"><b>Dễ hơn:</b> '+esc(g.easy)+'</div><div class="h"><b>Khó hơn:</b> '+esc(g.hard)+'</div></div>'
+      + '<p class="src">Bước trong lộ trình: '+esc(g.wr)+'.<br>'+esc(g.src)+(g.link?' · <a href="'+esc(g.link)+'" target="_blank" rel="noopener">xem nguồn</a>':'')+'.</p>'
+      + '</div>'
+      + '<div class="card"><h3 style="margin-top:0">Theo dõi</h3>'+checksHtml(d, true, g.pass)+notesHtml(d)+'</div>';
+  } else if(k==="replay"){
+    var favs = gameDays().filter(function(x){ return x<d && state.fav[x]; });
+    var wk = []; for(var x=w*7;x<w*7+5;x++) wk.push(x);
+    h += '<div class="card"><span class="badge">'+esc(lead)+'</span><div class="head"><h2>Ngày chơi lại trò con thích</h2></div>'
+      + '<p class="goal">Để bé tự chọn một trò. Chơi lại trò quen giúp bé tự tin và hiểu sâu hơn; thử thêm phần “Khó hơn” nếu bé làm rất dễ.</p>'
+      + '<h3>'+(favs.length?'Các trò bé đã thích (★)':'Các trò của tuần này')+'</h3>'
+      + (favs.length?favs:wk).map(pickBtn).join("")
+      + (favs.length?'':'<p class="muted">Bấm ★ ở trò bé thích để lần sau trò đó hiện ở đây.</p>')
+      + '</div><div class="card"><h3 style="margin-top:0">Theo dõi</h3>'+checksHtml(d,false)+notesHtml(d)+'</div>';
+  } else {
+    var redo = gameDays().filter(function(x){ return x<d && needsRedo(x); });
+    var notPlayed = gameDays().filter(function(x){ return x<d && !state.played[x]; });
+    h += '<div class="card"><span class="badge">'+esc(lead)+'</span><div class="head"><h2>'+(d===N-1?'Ngày ôn và tổng kết tháng':'Ngày ôn')+'</h2></div>'
+      + '<p class="goal">Chơi lại những trò chưa đạt, bắt đầu từ mức “Dễ hơn”. Khi bé đạt, mở trò đó và tích “Bé đạt yêu cầu”.</p>'
+      + '<h3>Cần chơi lại</h3>'+(redo.length?redo.map(pickBtn).join(""):'<p class="muted">Không có trò nào cần chơi lại. Cho bé chọn một trò bất kỳ hoặc nghỉ.</p>')
+      + (notPlayed.length?'<h3>Chưa chơi</h3>'+notPlayed.map(pickBtn).join(""):'')
+      + (d===N-1?'<p style="margin-top:12px"><button class="btn" data-sum="1">Xem tổng kết tháng</button></p>':'')
+      + '</div><div class="card"><h3 style="margin-top:0">Theo dõi</h3>'+checksHtml(d,false)+notesHtml(d)+'</div>';
+  }
+  h += '<div class="nav"><button class="btn" id="prev"'+(d===0?' disabled':'')+'>← Ngày trước</button><button class="btn" id="next"'+(d===N-1?' disabled':'')+'>Ngày sau →</button></div>';
+  document.getElementById("main").innerHTML = h;
 }
 
-function bind(){
-  document.getElementById("cPlayed").onchange = function(e){
-    state.played[current] = e.target.checked ? 1 : 0;
+/* ----- trang tổng kết ----- */
+function renderSum(){
+  var gd = gameDays(), h = '<div class="card"><h2 style="margin:0;font-size:1.1rem">Tổng kết theo mảng toán</h2>'
+    + '<p class="muted">Sáu mảng theo khung toán mầm non của NCETM (Anh). Mảng nào tỉ lệ đạt thấp thì nên chơi thêm.</p>'
+    + '<table><tr><th>Mảng</th><th class="n">Đã chơi</th><th class="n">Đạt</th></tr>';
+  Object.keys(AREAS).forEach(function(a){
+    var ds = gd.filter(function(d){ return gameOf(d).area===a; });
+    var pl = count(state.played, ds), ps = count(state.passed, ds);
+    h += '<tr><td>'+esc(AREAS[a])+'<div class="meter"><i style="width:'+(ds.length?Math.round(ps/ds.length*100):0)+'%"></i></div></td><td class="n">'+pl+'/'+ds.length+'</td><td class="n">'+ps+'/'+ds.length+'</td></tr>';
+  });
+  h += '</table></div>';
+
+  h += '<div class="card"><h3 style="margin-top:0">Theo tuần</h3><table><tr><th>Tuần</th><th class="n">Đã chơi</th><th class="n">Đạt</th></tr>';
+  for(var w=0;w<4;w++){
+    var ds = gd.filter(function(d){ return Math.floor(d/7)===w; });
+    h += '<tr><td>'+(w+1)+'. '+esc(WEEKS[w].title)+'</td><td class="n">'+count(state.played,ds)+'/5</td><td class="n">'+count(state.passed,ds)+'/5</td></tr>';
+  }
+  h += '</table></div>';
+
+  var redo = gd.filter(needsRedo), favs = gd.filter(function(d){ return state.fav[d]; });
+  h += '<div class="card"><h3 style="margin-top:0">Cần chơi lại</h3>'+(redo.length?redo.map(pickBtn).join(""):'<p class="muted">Chưa có trò nào.</p>')
+    + '<h3>Bé thích (★)</h3>'+(favs.length?favs.map(pickBtn).join(""):'<p class="muted">Chưa đánh dấu trò nào.</p>')+'</div>';
+
+  var notes = Object.keys(state.notes).map(Number).sort(function(a,b){return a-b;}).filter(function(d){ return state.notes[d]; });
+  h += '<div class="card"><h3 style="margin-top:0">Ghi chú đã viết</h3>'
+    + (notes.length ? notes.map(function(d){ var g=gameOf(d); return '<p><b>Ngày '+(d+1)+(g?': '+esc(g.title):'')+'</b><br>'+esc(state.notes[d]).replace(/\n/g,"<br>")+'</p>'; }).join("") : '<p class="muted">Chưa có ghi chú.</p>')
+    + '</div>';
+
+  h += '<div class="card tools"><h3 style="margin-top:0">Cài đặt và sao lưu</h3>'
+    + '<label>Ngày bắt đầu lộ trình: <input type="date" id="start" value="'+esc(state.start)+'"></label>'
+    + '<div class="row"><button class="btn" id="btnToday">Bắt đầu từ hôm nay</button></div>'
+    + '<p class="muted" style="margin-top:14px">Tiến độ chỉ lưu trên thiết bị này. Bấm “Tạo mã sao lưu”, sao chép đoạn mã và cất vào ghi chú hoặc tin nhắn. Khi đổi máy, dán mã vào ô dưới rồi bấm “Khôi phục”.</p>'
+    + '<textarea id="code" placeholder="Mã sao lưu sẽ hiện ở đây, hoặc dán mã cũ vào đây"></textarea>'
+    + '<div class="row"><button class="btn" id="btnExport">Tạo mã sao lưu</button><button class="btn" id="btnCopy">Sao chép</button><button class="btn" id="btnImport">Khôi phục</button><button class="btn danger" id="btnReset">Xóa tiến độ</button></div>'
+    + '<p class="muted" id="msg"></p></div>';
+
+  h += '<p class="src" style="padding:0 4px">Thứ tự lộ trình theo các khối White Rose Maths Reception (4–5 tuổi). Trò chơi được soạn lại bằng tiếng Việt, lấy ý tưởng từ <a href="'+LINKS.nrich+'" target="_blank" rel="noopener">NRICH Early Years (Đại học Cambridge)</a> và <a href="'+LINKS.dreme+'" target="_blank" rel="noopener">DREME Family Math (Stanford)</a>; sáu mảng theo <a href="'+LINKS.ncetm+'" target="_blank" rel="noopener">NCETM</a>. Đây không phải giáo án chính thức của Cambridge Early Years. Tiêu chí “đạt” là gợi ý tham khảo, bố mẹ điều chỉnh theo bé.</p>';
+  document.getElementById("main").innerHTML = h;
+}
+
+/* ----- sao lưu ----- */
+function exportCode(){ return btoa(unescape(encodeURIComponent(JSON.stringify(state)))); }
+function importCode(txt){
+  var s = JSON.parse(decodeURIComponent(escape(atob(String(txt).trim()))));
+  if(!valid(s)) throw new Error("bad");
+  if(!s.notes) s.notes = {};
+  if(typeof s.start!=="string") s.start = "";
+  return s;
+}
+
+/* ----- sự kiện ----- */
+function go(d){ if(d<0||d>=N) return; view="day"; current=d; renderAll(); window.scrollTo(0,0); }
+function renderAll(){ renderTop(); if(view==="day") renderDay(); else renderSum(); }
+function msg(t){ var m=document.getElementById("msg"); if(m) m.textContent=t; }
+
+document.getElementById("weeks").addEventListener("click", function(e){
+  var b = e.target.closest(".wk"); if(!b) return;
+  var w = b.getAttribute("data-w");
+  if(w==="sum"){ view="sum"; renderAll(); window.scrollTo(0,0); return; }
+  w = parseInt(w,10);
+  var t = todayIndex();
+  go((view==="day" && Math.floor(current/7)===w) ? current : (t!==null && Math.floor(t/7)===w ? t : w*7));
+});
+document.getElementById("days").addEventListener("click", function(e){
+  var b = e.target.closest(".dy"); if(b) go(parseInt(b.getAttribute("data-d"),10));
+});
+document.getElementById("main").addEventListener("click", function(e){
+  var el = e.target.closest("[data-go],[data-sum],#fav,#prev,#next,#btnToday,#btnExport,#btnCopy,#btnImport,#btnReset");
+  if(!el) return;
+  if(el.hasAttribute("data-go")) return go(parseInt(el.getAttribute("data-go"),10));
+  if(el.hasAttribute("data-sum")){ view="sum"; renderAll(); window.scrollTo(0,0); return; }
+  switch(el.id){
+    case "fav": state.fav[current] = state.fav[current]?0:1; save(); renderAll(); break;
+    case "prev": go(current-1); break;
+    case "next": go(current+1); break;
+    case "btnToday":
+      var d = new Date();
+      state.start = d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);
+      save(); go(0); break;
+    case "btnExport": document.getElementById("code").value = exportCode(); msg("Đã tạo mã. Bấm “Sao chép” rồi dán vào nơi anh/chị muốn cất."); break;
+    case "btnCopy":
+      var c = document.getElementById("code"); if(!c.value) c.value = exportCode();
+      c.select();
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(c.value).then(function(){ msg("Đã sao chép mã."); }, function(){ msg("Không tự sao chép được, hãy giữ tay vào ô mã để sao chép."); }); }
+      else msg("Hãy giữ tay vào ô mã để sao chép.");
+      break;
+    case "btnImport":
+      try{
+        var s = importCode(document.getElementById("code").value);
+        if(confirm("Thay toàn bộ tiến độ hiện tại bằng bản sao lưu này?")){ state = s; save(); current = initialDay(); renderAll(); msg("Đã khôi phục."); }
+      }catch(err){ msg("Mã không hợp lệ. Hãy dán đầy đủ đoạn mã đã sao lưu."); }
+      break;
+    case "btnReset":
+      if(confirm("Xóa toàn bộ tiến độ, ghi chú và ngày bắt đầu?")){ state = blank(); save(); current = 0; renderAll(); }
+      break;
+  }
+});
+document.getElementById("main").addEventListener("change", function(e){
+  var id = e.target.id;
+  if(id==="cPlayed"){
+    state.played[current] = e.target.checked?1:0;
     if(!e.target.checked) state.passed[current] = 0;
     save(); renderAll();
-  };
-  document.getElementById("cPassed").onchange = function(e){
-    state.passed[current] = e.target.checked ? 1 : 0;
+  } else if(id==="cPassed"){
+    state.passed[current] = e.target.checked?1:0;
     if(e.target.checked) state.played[current] = 1;
     save(); renderAll();
-  };
-  document.getElementById("prev").onclick = function(){ go(current-1); };
-  document.getElementById("next").onclick = function(){ go(current+1); };
-  document.getElementById("start").onchange = function(e){
-    state.start = e.target.value; save(); var t = todayIndex(); if(t!==null) current = t; renderAll();
-  };
-  document.getElementById("btnToday").onclick = function(){
-    var d = new Date(), m = ("0"+(d.getMonth()+1)).slice(-2), dd = ("0"+d.getDate()).slice(-2);
-    state.start = d.getFullYear()+"-"+m+"-"+dd; save(); current = 0; renderAll();
-  };
-  document.getElementById("btnReset").onclick = function(){
-    if(confirm("Xóa toàn bộ tiến độ và ngày bắt đầu?")){
-      state = {played:[0,0,0,0,0,0,0], passed:[0,0,0,0,0,0,0], start:""};
-      save(); current = 0; renderAll();
-    }
-  };
-}
-function go(i){ if(i<0||i>6) return; current = i; renderAll(); window.scrollTo(0,0); }
-function renderAll(){ renderTabs(); renderStats(); renderDay(); }
-
-document.getElementById("tabs").addEventListener("click", function(e){
-  var b = e.target.closest(".tab"); if(b) go(parseInt(b.getAttribute("data-i"),10));
+  } else if(id==="start"){
+    state.start = e.target.value; save();
+    var t = todayIndex(); if(t!==null) current = t;
+    renderAll();
+  }
 });
+document.getElementById("main").addEventListener("input", function(e){
+  if(e.target.id==="note"){
+    if(e.target.value) state.notes[current] = e.target.value; else delete state.notes[current];
+    save();
+  }
+});
+
 renderAll();
 if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
 </script>

@@ -1,5 +1,5 @@
-var CACHE = "toan-tu-duy-v1";
-var FILES = ["./","./index.html","./manifest.webmanifest","./icon-192.png","./icon-512.png","./icon-maskable-512.png","./apple-touch-icon.png"];
+var CACHE = "toan-tu-duy-v2";
+var FILES = ["./","./index.html","./data.js","./manifest.webmanifest","./icon-192.png","./icon-512.png","./icon-maskable-512.png","./apple-touch-icon.png"];
 self.addEventListener("install", function(e){
   e.waitUntil(caches.open(CACHE).then(function(c){ return c.addAll(FILES); }).then(function(){ return self.skipWaiting(); }));
 });
