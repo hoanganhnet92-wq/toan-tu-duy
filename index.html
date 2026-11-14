@@ -82,6 +82,10 @@ td.n,th.n{text-align:center;width:4.2em}
 .tools label{display:block;margin:8px 0}
 .tools input[type=date]{padding:6px 8px;border:1px solid var(--line);border-radius:8px;margin-left:6px;background:#fff}
 .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.solo{display:flex;align-items:center;gap:12px;margin:10px 0}
+.solo .btn{width:46px;height:46px;font-size:1.3rem;line-height:1;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.solo b{font-size:1.6rem;min-width:2em;text-align:center;color:var(--brand)}
+.lnk{background:none;border:0;padding:0;color:var(--brand);text-decoration:underline;cursor:pointer;font-size:inherit}
 </style>
 </head>
 <body>
@@ -102,16 +106,17 @@ td.n,th.n{text-align:center;width:4.2em}
 "use strict";
 var N = 28, KEY = "toan-tu-duy-v2";
 var state = load();
-var view = "day";            // "day" | "sum"
+var view = "day";            // "day" | "sum" | "coach"
 var current = initialDay();
 
-function blank(){ return {start:"", played:zeros(), passed:zeros(), fav:zeros(), notes:{}}; }
+function blank(){ return {start:"", played:zeros(), passed:zeros(), fav:zeros(), notes:{}, solo:[0,0,0,0]}; }
+function fixSolo(s){ if(!Array.isArray(s.solo) || s.solo.length!==4) s.solo=[0,0,0,0]; return s; }
 function zeros(){ var a=[]; for(var i=0;i<N;i++) a.push(0); return a; }
 function valid(s){ return s && Array.isArray(s.played) && s.played.length===N && Array.isArray(s.passed) && s.passed.length===N && Array.isArray(s.fav) && s.fav.length===N; }
 function load(){
   try{
     var s = JSON.parse(localStorage.getItem(KEY) || "null");
-    if(valid(s)){ if(!s.notes) s.notes = {}; return s; }
+    if(valid(s)){ if(!s.notes) s.notes = {}; return fixSolo(s); }
     var old = JSON.parse(localStorage.getItem("toan-tu-duy-v1") || "null");
     var b = blank(); if(old && old.start) b.start = old.start; return b;
   }catch(e){ return blank(); }
@@ -158,6 +163,7 @@ function renderTop(){
 
   var w = Math.floor(current/7), h = "";
   for(var i=0;i<4;i++) h += '<button class="wk'+(view==="day"&&i===w?" active":"")+'" data-w="'+i+'">Tuần '+(i+1)+'</button>';
+  h += '<button class="wk'+(view==="coach"?" active":"")+'" data-w="coach">Cách hỏi</button>';
   h += '<button class="wk'+(view==="sum"?" active":"")+'" data-w="sum">Tổng kết</button>';
   document.getElementById("weeks").innerHTML = h;
 
@@ -210,7 +216,8 @@ function renderDay(){
       + '<p class="goal"><b>Mục tiêu:</b> '+esc(g.goal)+'</p>'
       + '<h3>Chuẩn bị</h3><div>'+esc(g.mats)+'</div>'
       + '<h3>Cách chơi</h3><ol>'+li(g.steps)+'</ol>'
-      + '<h3>Câu hỏi nên hỏi bé</h3><div class="ask"><ul>'+li(g.ask)+'</ul></div>'
+      + '<h3>Câu hỏi nên hỏi bé</h3><div class="ask"><ul>'+li(g.ask)+'</ul>'
+      + '<p class="muted" style="margin:8px 0 0">Khi bé bế tắc: đếm thầm 10 giây, rồi hỏi “Con đang vướng ở bước nào?” — đừng giảng ngay. <button class="lnk" data-coach="1">Xem cách hỏi</button></p></div>'
       + '<h3>Điều chỉnh mức độ</h3><div class="lv"><div class="e"><b>Dễ hơn:</b> '+esc(g.easy)+'</div><div class="h"><b>Khó hơn:</b> '+esc(g.hard)+'</div></div>'
       + '<p class="src">Bước trong lộ trình: '+esc(g.wr)+'.<br>'+esc(g.src)+(g.link?' · <a href="'+esc(g.link)+'" target="_blank" rel="noopener">xem nguồn</a>':'')+'.</p>'
       + '</div>'
@@ -250,12 +257,12 @@ function renderSum(){
   });
   h += '</table></div>';
 
-  h += '<div class="card"><h3 style="margin-top:0">Theo tuần</h3><table><tr><th>Tuần</th><th class="n">Đã chơi</th><th class="n">Đạt</th></tr>';
+  h += '<div class="card"><h3 style="margin-top:0">Theo tuần</h3><table><tr><th>Tuần</th><th class="n">Đã chơi</th><th class="n">Đạt</th><th class="n">Tự vượt khó</th></tr>';
   for(var w=0;w<4;w++){
     var ds = gd.filter(function(d){ return Math.floor(d/7)===w; });
-    h += '<tr><td>'+(w+1)+'. '+esc(WEEKS[w].title)+'</td><td class="n">'+count(state.played,ds)+'/5</td><td class="n">'+count(state.passed,ds)+'/5</td></tr>';
+    h += '<tr><td>'+(w+1)+'. '+esc(WEEKS[w].title)+'</td><td class="n">'+count(state.played,ds)+'/5</td><td class="n">'+count(state.passed,ds)+'/5</td><td class="n">'+state.solo[w]+'</td></tr>';
   }
-  h += '</table></div>';
+  h += '</table><p class="muted">Cột “Tự vượt khó”: số lần bố mẹ để con tự vượt qua chỗ khó, tự đếm ở trang <button class="lnk" data-coach="1">Cách hỏi</button>. Cột này quan trọng hơn hai cột kia.</p></div>';
 
   var redo = gd.filter(needsRedo), favs = gd.filter(function(d){ return state.fav[d]; });
   h += '<div class="card"><h3 style="margin-top:0">Cần chơi lại</h3>'+(redo.length?redo.map(pickBtn).join(""):'<p class="muted">Chưa có trò nào.</p>')
@@ -278,6 +285,52 @@ function renderSum(){
   document.getElementById("main").innerHTML = h;
 }
 
+/* ----- trang Cách hỏi ----- */
+function renderCoach(){
+  var w = Math.floor(current/7), h = "";
+
+  h += '<div class="card"><span class="badge">Dành cho bố mẹ</span>'
+    + '<div class="head"><h2>Cách hỏi quan trọng hơn trò chơi</h2></div>'
+    + '<p class="goal">'+esc(COACH.intro)+'</p></div>';
+
+  h += '<div class="card"><h3 style="margin-top:0">Ba thói quen nền</h3>';
+  COACH.seeds.forEach(function(s,i){
+    h += '<p><b>'+(i+1)+'. '+esc(s.t)+'</b><br><span class="muted">'+esc(s.d)+'</span></p>';
+  });
+  h += '</div>';
+
+  h += '<div class="card"><h3 style="margin-top:0">Bảng đổi câu hỏi</h3>'
+    + '<p class="muted">Đổi câu hỏi là đổi thói quen tư duy của cả nhà. Các câu bên phải chỉ có tác dụng nếu hỏi bằng giọng tò mò thật, không phải giọng kiểm tra.</p>'
+    + '<table><tr><th>Thay vì hỏi</th><th>Hãy hỏi</th><th>Dùng khi</th></tr>';
+  COACH.swaps.forEach(function(s){
+    h += '<tr><td class="muted">'+esc(s.bad)+'</td><td><b>'+esc(s.good)+'</b></td><td class="muted">'+esc(s.when)+'</td></tr>';
+  });
+  h += '</table></div>';
+
+  h += '<div class="card"><h3 style="margin-top:0">Tự kiểm tra cuối tuần</h3>'
+    + '<p class="goal">'+esc(COACH.weekCheck)+'</p>'
+    + '<div class="solo"><button class="btn" data-solo="-1" aria-label="Bớt một">−</button>'
+    + '<b id="soloN">'+state.solo[w]+'</b>'
+    + '<button class="btn" data-solo="1" aria-label="Thêm một">+</button>'
+    + '<span class="muted">lần · tuần '+(w+1)+'</span></div>'
+    + (state.solo[w]===0 ? '<p class="redo-note">Nếu con số là 0, vấn đề nằm ở bố mẹ, không ở con.</p>' : '')
+    + '</div>';
+
+  h += '<div class="card"><h3 style="margin-top:0">Bảy cái bẫy bố mẹ dễ rơi vào</h3><ol>'+li(COACH.traps)+'</ol></div>';
+
+  h += '<div class="card"><h3 style="margin-top:0">Dấu hiệu đang đi đúng hướng</h3>'
+    + '<p class="muted">Không đo bằng điểm hay số trò đã chơi. Đo bằng những câu con tự nói ra.</p>'
+    + '<table><tr><th>Mốc</th><th>Dấu hiệu</th><th>Nếu chưa thấy</th></tr>';
+  COACH.milestones.forEach(function(m){
+    h += '<tr><td>'+esc(m.m)+'</td><td><b>'+esc(m.sign)+'</b></td><td class="muted">'+esc(m.fix)+'</td></tr>';
+  });
+  h += '</table></div>';
+
+  h += '<p class="src" style="padding:0 4px">Phần này soạn từ nguyên lý siêu nhận thức (metacognition) và retrieval practice trong khoa học học tập, không phải từ một giáo án cụ thể. Mục tiêu dài hạn: khi vào lớp 1, bé coi việc chưa biết là bình thường và có phản xạ tự thử trước khi nhờ.</p>';
+
+  document.getElementById("main").innerHTML = h;
+}
+
 /* ----- sao lưu ----- */
 function exportCode(){ return btoa(unescape(encodeURIComponent(JSON.stringify(state)))); }
 function importCode(txt){
@@ -285,18 +338,19 @@ function importCode(txt){
   if(!valid(s)) throw new Error("bad");
   if(!s.notes) s.notes = {};
   if(typeof s.start!=="string") s.start = "";
-  return s;
+  return fixSolo(s);
 }
 
 /* ----- sự kiện ----- */
 function go(d){ if(d<0||d>=N) return; view="day"; current=d; renderAll(); window.scrollTo(0,0); }
-function renderAll(){ renderTop(); if(view==="day") renderDay(); else renderSum(); }
+function renderAll(){ renderTop(); if(view==="day") renderDay(); else if(view==="coach") renderCoach(); else renderSum(); }
 function msg(t){ var m=document.getElementById("msg"); if(m) m.textContent=t; }
 
 document.getElementById("weeks").addEventListener("click", function(e){
   var b = e.target.closest(".wk"); if(!b) return;
   var w = b.getAttribute("data-w");
   if(w==="sum"){ view="sum"; renderAll(); window.scrollTo(0,0); return; }
+  if(w==="coach"){ view="coach"; renderAll(); window.scrollTo(0,0); return; }
   w = parseInt(w,10);
   var t = todayIndex();
   go((view==="day" && Math.floor(current/7)===w) ? current : (t!==null && Math.floor(t/7)===w ? t : w*7));
@@ -305,10 +359,15 @@ document.getElementById("days").addEventListener("click", function(e){
   var b = e.target.closest(".dy"); if(b) go(parseInt(b.getAttribute("data-d"),10));
 });
 document.getElementById("main").addEventListener("click", function(e){
-  var el = e.target.closest("[data-go],[data-sum],#fav,#prev,#next,#btnToday,#btnExport,#btnCopy,#btnImport,#btnReset");
+  var el = e.target.closest("[data-go],[data-sum],[data-coach],[data-solo],#fav,#prev,#next,#btnToday,#btnExport,#btnCopy,#btnImport,#btnReset");
   if(!el) return;
   if(el.hasAttribute("data-go")) return go(parseInt(el.getAttribute("data-go"),10));
   if(el.hasAttribute("data-sum")){ view="sum"; renderAll(); window.scrollTo(0,0); return; }
+  if(el.hasAttribute("data-coach")){ view="coach"; renderAll(); window.scrollTo(0,0); return; }
+  if(el.hasAttribute("data-solo")){
+    var w = Math.floor(current/7), n = state.solo[w] + parseInt(el.getAttribute("data-solo"),10);
+    state.solo[w] = Math.max(0, Math.min(99, n)); save(); renderCoach(); return;
+  }
   switch(el.id){
     case "fav": state.fav[current] = state.fav[current]?0:1; save(); renderAll(); break;
     case "prev": go(current-1); break;

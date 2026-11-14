@@ -285,3 +285,52 @@ var GAMES = [
    hard: "Dùng câu cần suy luận: “Số nào cũng ghép đôi được hết”, “Vật to hơn thì luôn nặng hơn”.",
    pass: "Phát hiện đúng câu sai ít nhất 4/5 lần và giải thích được lý do bằng lời hoặc bằng đồ vật." }
 ];
+
+/* ---------- CÁCH HỎI: nuôi năng lực tự học ----------
+   Không phải kỹ thuật toán, mà là thói quen hỏi của bố mẹ.
+   Mục tiêu: siêu nhận thức (metacognition) — bé biết mình đang hiểu hay chưa hiểu
+   và tự điều chỉnh. Cửa sổ phát triển khoảng 4–7 tuổi. */
+
+var COACH = {
+  intro: "Năm biểu hiện của một đứa trẻ “biết cách học” đều là bề mặt của một năng lực duy nhất: biết mình đang hiểu hay chưa hiểu, và tự điều chỉnh. Ở tuổi 4–5 chưa dạy được kỹ thuật học, chỉ gieo được ba thói quen nền dưới đây.",
+
+  seeds: [
+    { t: "Quen với cảm giác “mình chưa biết”",
+      d: "Khi bé hỏi, đừng trả lời ngay: “Ồ, con nghĩ sao?” hoặc “Bố cũng chưa biết, mình thử tìm xem”. Để không biết thành trạng thái bình thường và thú vị, không phải điều đáng che giấu." },
+    { t: "Giải thích lại bằng lời của mình",
+      d: "Sau mỗi trò, úp đồ lại và hỏi “Con làm sao mà ra số này?”. Đây là retrieval practice ở dạng thô sơ — cơ chế củng cố ký ức mạnh nhất mà khoa học học tập biết." },
+    { t: "Chịu đựng khoảng lặng",
+      d: "Khi bé bế tắc, đếm thầm 10 giây rồi mới hỏi “Con đang vướng ở bước nào?”. Mỗi lần làm thay là lấy đi một lần tập của con." }
+  ],
+
+  swaps: [
+    { bad: "Con học bài chưa?",            good: "Hôm nay con hiểu thêm được điều gì?",            when: "Bữa ăn, lúc đón con" },
+    { bad: "Đáp án là bao nhiêu?",         good: "Con đã suy nghĩ thế nào để ra đáp án?",          when: "Khi con làm đúng" },
+    { bad: "(Giảng lại ngay)",             good: "Con đang vướng ở bước nào?",                     when: "Khi con bế tắc" },
+    { bad: "Để bố làm cho nhanh",          good: "Con thử cách nào rồi?",                          when: "Khi con làm chậm" },
+    { bad: "Con giỏi lắm! Con thông minh!",good: "Bố thấy con tự tìm ra cách khác, hay đấy",       when: "Khi muốn khen" },
+    { bad: "Sai rồi, phải làm thế này",    good: "Thử kiểm tra lại xem có đúng không?",            when: "Khi con làm sai" },
+    { bad: "(Trả lời ngay câu hỏi của con)",good:"Ồ, con nghĩ sao? Mình thử tìm xem",              when: "Khi con hỏi" },
+    { bad: "Con đọc lại đi cho nhớ",       good: "Úp sách lại, kể cho bố nghe xem",                when: "Khi ôn bài" }
+  ],
+
+  traps: [
+    "Giảng ngay khi con bế tắc — phản xạ tự nhiên nhưng triệt tiêu toàn bộ lợi ích. Đếm thầm 10 giây.",
+    "Nhầm “ngồi lâu” với “học được nhiều” — đo thời gian là đo sai đại lượng.",
+    "Khen thông minh thay vì khen cách làm — trẻ sẽ né bài khó để bảo vệ cái nhãn đó.",
+    "Sửa sai ngay lập tức — bỏ mất cơ hội quý nhất: con tự phát hiện lỗi.",
+    "Đổi câu hỏi nhưng giữ giọng kiểm tra — trẻ phân biệt được hai giọng rất nhanh.",
+    "Làm rầm rộ rồi bỏ giữa — hai câu hỏi mỗi ngày trong ba năm hơn một tháng làm đầy đủ rồi dừng.",
+    "So sánh với bạn hoặc với em — chuyển động lực từ bên trong ra bên ngoài, ngược hẳn mục tiêu."
+  ],
+
+  milestones: [
+    { m: "Sau 3 tháng", sign: "Bé bắt đầu nói “con chưa hiểu chỗ này” thay vì im hoặc đoán bừa", fix: "Xem bố mẹ còn phản ứng thất vọng khi con nói chưa hiểu không" },
+    { m: "Sau 6 tháng", sign: "Bé tự kể lại được trò vừa chơi mà không cần gợi",                 fix: "Giảm độ dài: kể lại một bước thôi, đừng cả trò" },
+    { m: "Sau 6 tháng", sign: "Bé hỏi “tại sao” nhiều hơn hỏi “đáp án là gì”",                   fix: "Xem bố mẹ có đang trả lời quá nhanh không" },
+    { m: "Sau 1 năm",   sign: "Gặp trò lạ, bé thử ít nhất một cách trước khi gọi bố mẹ",         fix: "Tăng độ khó chậm hơn — bé có thể đang sợ sai" },
+    { m: "Sau 1 năm",   sign: "Bé tự nói “để con làm cái này trước”",                            fix: "Cho nhiều lựa chọn có cấu trúc hơn trong ngày" }
+  ],
+
+  weekCheck: "Tuần này mình đã để con tự vượt qua mấy lần khó?"
+};
