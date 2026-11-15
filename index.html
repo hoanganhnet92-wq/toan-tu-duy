@@ -84,6 +84,11 @@ td.n,th.n{text-align:center;width:4.2em}
 .tools label{display:block;margin:8px 0}
 .tools input[type=date]{padding:6px 8px;border:1px solid var(--line);border-radius:8px;margin-left:6px;background:#fff}
 .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.kids{display:flex;gap:8px;padding:8px 10px;background:#17413a}
+.kid{flex:1;border:1px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.72);border-radius:12px;padding:7px 4px;cursor:pointer;text-align:center;line-height:1.15}
+.kid b{display:block;font-size:.95rem}
+.kid small{font-size:.72rem;opacity:.8}
+.kid.active{background:#fff;color:var(--brand);border-color:#fff;font-weight:600}
 .solo{display:flex;align-items:center;gap:12px;margin:10px 0}
 .solo .btn{width:46px;height:46px;font-size:1.3rem;line-height:1;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .solo b{font-size:1.6rem;min-width:2em;text-align:center;color:var(--brand)}
@@ -91,10 +96,11 @@ td.n,th.n{text-align:center;width:4.2em}
 </style>
 </head>
 <body>
+<nav class="kids" id="kids" aria-label="Chọn bé"></nav>
 <header>
   <div class="wrap">
-    <h1>Toán tư duy cho bé 4 tuổi</h1>
-    <p>Lộ trình 4 tuần · mỗi ngày 10–15 phút · chơi bằng đồ thật</p>
+    <h1 id="hTitle">Toán tư duy cho bé 4 tuổi</h1>
+    <p id="hLead">Lộ trình 4 tuần · mỗi ngày 10–15 phút · chơi bằng đồ thật</p>
     <div class="bar"><i id="bar"></i></div>
     <div class="stats"><span id="sPlayed"></span><span id="sPassed"></span><span id="sRedo"></span></div>
   </div>
@@ -104,9 +110,36 @@ td.n,th.n{text-align:center;width:4.2em}
 <main id="main"></main>
 
 <script src="data.js"></script>
+<script src="data-tin.js"></script>
 <script>
 "use strict";
-var N = 28, KEY = "toan-tu-duy-v2";
+var N = 28;
+
+/* ----- hai bé: mỗi bé một bộ dữ liệu và một tiến độ riêng ----- */
+var POOH_A = AREAS, POOH_W = WEEKS, POOH_G = GAMES;
+var KIDS = {
+  pooh: { name:"Pooh", age:"5 tuổi", key:"toan-tu-duy-v2",
+    title:"Toán tư duy cho Pooh",
+    lead:"Lộ trình 4 tuần · mỗi ngày 10–15 phút · chơi bằng đồ thật",
+    pass:"Bé đạt yêu cầu", passWord:"Đạt", redoWord:"Cần chơi lại",
+    wrLabel:"Theo các khối White Rose Reception",
+    areaTitle:"Tổng kết theo mảng toán",
+    areaNote:"Sáu mảng theo khung toán mầm non của NCETM (Anh). Mảng nào tỉ lệ đạt thấp thì nên chơi thêm.",
+    A:POOH_A, W:POOH_W, G:POOH_G },
+  tin: { name:"Tin", age:"16–18 tháng", key:"toan-tu-duy-tin-v1",
+    title:"Hoạt động cho Tin",
+    lead:"Lộ trình 4 tuần · mỗi ngày 5–10 phút · chơi bằng đồ thật",
+    pass:"Bé hứng thú, muốn chơi lại", passWord:"Thích", redoWord:"Thử lại sau",
+    wrLabel:"Mốc phát triển tham khảo",
+    areaTitle:"Tổng kết theo mảng phát triển",
+    areaNote:"Năm mảng phát triển của trẻ tập đi. Ở tuổi này không có đạt hay không đạt — cột bên chỉ ghi nhận bé có hứng thú hay không.",
+    A:TIN_AREAS, W:TIN_WEEKS, G:TIN_GAMES }
+};
+var KID = (function(){ try{ return localStorage.getItem("tt-kid")==="tin" ? "tin" : "pooh"; }catch(e){ return "pooh"; } })();
+var KEY = KIDS[KID].key;
+function kidApply(){ var k = KIDS[KID]; AREAS=k.A; WEEKS=k.W; GAMES=k.G; KEY=k.key; }
+kidApply();
+
 var state = load();
 var view = "day";            // "day" | "sum" | "coach"
 var current = initialDay();
@@ -155,12 +188,29 @@ function li(a){ return a.map(function(x){ return "<li>"+esc(x)+"</li>"; }).join(
 function count(arr, days){ return days.reduce(function(n,d){ return n + (arr[d]?1:0); }, 0); }
 
 /* ----- thanh trên ----- */
+function renderKids(){
+  var h = "";
+  Object.keys(KIDS).forEach(function(k){
+    h += '<button class="kid'+(k===KID?" active":"")+'" data-kid="'+k+'"><b>'+esc(KIDS[k].name)+'</b><small>'+esc(KIDS[k].age)+'</small></button>';
+  });
+  document.getElementById("kids").innerHTML = h;
+  document.getElementById("hTitle").textContent = KIDS[KID].title;
+  document.getElementById("hLead").textContent = KIDS[KID].lead;
+}
+function switchKid(k){
+  if(k===KID) return;
+  KID = k; try{ localStorage.setItem("tt-kid", k); }catch(e){}
+  kidApply();
+  state = load(); current = initialDay(); view = "day";
+  renderKids(); renderAll(); window.scrollTo(0,0);
+}
 function renderTop(){
+  renderKids();
   var gd = gameDays(), played = count(state.played, gd), passed = count(state.passed, gd);
   var redo = gd.filter(needsRedo).length;
   document.getElementById("sPlayed").textContent = "Đã chơi "+played+"/"+gd.length;
-  document.getElementById("sPassed").textContent = "Đạt "+passed+"/"+gd.length;
-  document.getElementById("sRedo").textContent = "Cần chơi lại "+redo;
+  document.getElementById("sPassed").textContent = KIDS[KID].passWord+" "+passed+"/"+gd.length;
+  document.getElementById("sRedo").textContent = KIDS[KID].redoWord+" "+redo;
   document.getElementById("bar").style.width = Math.round(passed/gd.length*100)+"%";
 
   var w = Math.floor(current/7), h = "";
@@ -190,8 +240,8 @@ function checksHtml(d, withPass, passTxt){
   var h = '<div class="checks">'
     + '<label class="check'+(state.played[d]?' on':'')+'"><input type="checkbox" id="cPlayed"'+(state.played[d]?' checked':'')+'><span><strong>Đã chơi</strong><small>Tích sau khi hai bố con/mẹ con chơi xong.</small></span></label>';
   if(withPass){
-    h += '<label class="check'+(state.passed[d]?' on':'')+'"><input type="checkbox" id="cPassed"'+(state.passed[d]?' checked':'')+'><span><strong>Bé đạt yêu cầu</strong><small>'+esc(passTxt)+'</small></span></label>';
-    if(needsRedo(d)) h += '<div class="redo-note">Trò này đang ở trạng thái <b>cần chơi lại</b>. Nó sẽ tự hiện trong ngày ôn cuối tuần. Chưa đạt là bình thường, không cần ép bé.</div>';
+    h += '<label class="check'+(state.passed[d]?' on':'')+'"><input type="checkbox" id="cPassed"'+(state.passed[d]?' checked':'')+'><span><strong>'+esc(KIDS[KID].pass)+'</strong><small>'+esc(passTxt)+'</small></span></label>';
+    if(needsRedo(d)) h += '<div class="redo-note">Trò này đang ở trạng thái <b>'+esc(KIDS[KID].redoWord.toLowerCase())+'</b>. Nó sẽ tự hiện trong ngày ôn cuối tuần. Chưa đạt là bình thường, không cần ép bé.</div>';
   }
   return h + '</div>';
 }
@@ -208,7 +258,7 @@ function renderDay(){
 
   if(d%7===0){
     h += '<details><summary>Tuần '+(w+1)+': '+esc(WEEKS[w].title)+' · đồ cần chuẩn bị</summary>'
-      + '<p class="muted">Theo các khối White Rose Reception: '+esc(WEEKS[w].wr)+'</p><ul>'+li(WEEKS[w].mats)+'</ul></details>';
+      + '<p class="muted">'+esc(KIDS[KID].wrLabel)+': '+esc(WEEKS[w].wr)+'</p><ul>'+li(WEEKS[w].mats)+'</ul></details>';
   }
 
   if(k==="game"){
@@ -238,7 +288,7 @@ function renderDay(){
     var notPlayed = gameDays().filter(function(x){ return x<d && !state.played[x]; });
     h += '<div class="card"><span class="badge">'+esc(lead)+'</span><div class="head"><h2>'+(d===N-1?'Ngày ôn và tổng kết tháng':'Ngày ôn')+'</h2></div>'
       + '<p class="goal">Chơi lại những trò chưa đạt, bắt đầu từ mức “Dễ hơn”. Khi bé đạt, mở trò đó và tích “Bé đạt yêu cầu”.</p>'
-      + '<h3>Cần chơi lại</h3>'+(redo.length?redo.map(pickBtn).join(""):'<p class="muted">Không có trò nào cần chơi lại. Cho bé chọn một trò bất kỳ hoặc nghỉ.</p>')
+      + '<h3>'+esc(KIDS[KID].redoWord)+'</h3>'+(redo.length?redo.map(pickBtn).join(""):'<p class="muted">Không có trò nào cần chơi lại. Cho bé chọn một trò bất kỳ hoặc nghỉ.</p>')
       + (notPlayed.length?'<h3>Chưa chơi</h3>'+notPlayed.map(pickBtn).join(""):'')
       + (d===N-1?'<p style="margin-top:12px"><button class="btn" data-sum="1">Xem tổng kết tháng</button></p>':'')
       + '</div><div class="card"><h3 style="margin-top:0">Theo dõi</h3>'+checksHtml(d,false)+notesHtml(d)+'</div>';
@@ -249,9 +299,9 @@ function renderDay(){
 
 /* ----- trang tổng kết ----- */
 function renderSum(){
-  var gd = gameDays(), h = '<div class="card"><h2 style="margin:0;font-size:1.1rem">Tổng kết theo mảng toán</h2>'
-    + '<p class="muted">Sáu mảng theo khung toán mầm non của NCETM (Anh). Mảng nào tỉ lệ đạt thấp thì nên chơi thêm.</p>'
-    + '<table><tr><th>Mảng</th><th class="n">Đã chơi</th><th class="n">Đạt</th></tr>';
+  var gd = gameDays(), h = '<div class="card"><h2 style="margin:0;font-size:1.1rem">'+esc(KIDS[KID].areaTitle)+'</h2>'
+    + '<p class="muted">'+esc(KIDS[KID].areaNote)+'</p>'
+    + '<table><tr><th>Mảng</th><th class="n">Đã chơi</th><th class="n">'+esc(KIDS[KID].passWord)+'</th></tr>';
   Object.keys(AREAS).forEach(function(a){
     var ds = gd.filter(function(d){ return gameOf(d).area===a; });
     var pl = count(state.played, ds), ps = count(state.passed, ds);
@@ -259,7 +309,7 @@ function renderSum(){
   });
   h += '</table></div>';
 
-  h += '<div class="card"><h3 style="margin-top:0">Theo tuần</h3><table><tr><th>Tuần</th><th class="n">Đã chơi</th><th class="n">Đạt</th><th class="n">Tự vượt khó</th></tr>';
+  h += '<div class="card"><h3 style="margin-top:0">Theo tuần</h3><table><tr><th>Tuần</th><th class="n">Đã chơi</th><th class="n">'+esc(KIDS[KID].passWord)+'</th><th class="n">Tự vượt khó</th></tr>';
   for(var w=0;w<4;w++){
     var ds = gd.filter(function(d){ return Math.floor(d/7)===w; });
     h += '<tr><td>'+(w+1)+'. '+esc(WEEKS[w].title)+'</td><td class="n">'+count(state.played,ds)+'/5</td><td class="n">'+count(state.passed,ds)+'/5</td><td class="n">'+state.solo[w]+'</td></tr>';
@@ -267,7 +317,7 @@ function renderSum(){
   h += '</table><p class="muted">Cột “Tự vượt khó”: số lần bố mẹ để con tự vượt qua chỗ khó, tự đếm ở trang <button class="lnk" data-coach="1">Cách hỏi</button>. Cột này quan trọng hơn hai cột kia.</p></div>';
 
   var redo = gd.filter(needsRedo), favs = gd.filter(function(d){ return state.fav[d]; });
-  h += '<div class="card"><h3 style="margin-top:0">Cần chơi lại</h3>'+(redo.length?redo.map(pickBtn).join(""):'<p class="muted">Chưa có trò nào.</p>')
+  h += '<div class="card"><h3 style="margin-top:0">'+esc(KIDS[KID].redoWord)+'</h3>'+(redo.length?redo.map(pickBtn).join(""):'<p class="muted">Chưa có trò nào.</p>')
     + '<h3>Bé thích (★)</h3>'+(favs.length?favs.map(pickBtn).join(""):'<p class="muted">Chưa đánh dấu trò nào.</p>')+'</div>';
 
   var notes = Object.keys(state.notes).map(Number).sort(function(a,b){return a-b;}).filter(function(d){ return state.notes[d]; });
@@ -283,7 +333,10 @@ function renderSum(){
     + '<div class="row"><button class="btn" id="btnExport">Tạo mã sao lưu</button><button class="btn" id="btnCopy">Sao chép</button><button class="btn" id="btnImport">Khôi phục</button><button class="btn danger" id="btnReset">Xóa tiến độ</button></div>'
     + '<p class="muted" id="msg"></p></div>';
 
-  h += '<p class="src" style="padding:0 4px">Thứ tự lộ trình theo các khối White Rose Maths Reception (4–5 tuổi). Trò chơi được soạn lại bằng tiếng Việt, lấy ý tưởng từ <a href="'+LINKS.nrich+'" target="_blank" rel="noopener">NRICH Early Years (Đại học Cambridge)</a> và <a href="'+LINKS.dreme+'" target="_blank" rel="noopener">DREME Family Math (Stanford)</a>; sáu mảng theo <a href="'+LINKS.ncetm+'" target="_blank" rel="noopener">NCETM</a>. Đây không phải giáo án chính thức của Cambridge Early Years. Tiêu chí “đạt” là gợi ý tham khảo, bố mẹ điều chỉnh theo bé.</p>';
+  h += '<p class="src" style="padding:0 4px">' + (KID==="pooh"
+    ? 'Thứ tự lộ trình theo các khối White Rose Maths Reception (4–5 tuổi). Trò chơi được soạn lại bằng tiếng Việt, lấy ý tưởng từ <a href="'+LINKS.nrich+'" target="_blank" rel="noopener">NRICH Early Years (Đại học Cambridge)</a> và <a href="'+LINKS.dreme+'" target="_blank" rel="noopener">DREME Family Math (Stanford)</a>; sáu mảng theo <a href="'+LINKS.ncetm+'" target="_blank" rel="noopener">NCETM</a>. Đây không phải giáo án chính thức của Cambridge Early Years. Tiêu chí “đạt” là gợi ý tham khảo, bố mẹ điều chỉnh theo bé.'
+    : 'Mốc phát triển tham khảo bảng milestone 18 tháng của <a href="'+TIN_LINKS.cdc+'" target="_blank" rel="noopener">CDC (Learn the Signs. Act Early)</a>. Hoạt động soạn lại bằng tiếng Việt, lấy ý tưởng từ <a href="'+TIN_LINKS.ya+'" target="_blank" rel="noopener">Special Olympics Young Athletes</a> và <a href="'+TIN_LINKS.dreme+'" target="_blank" rel="noopener">DREME Family Math (Stanford)</a>. Ở tuổi 16–18 tháng mỗi bé một nhịp, chênh lệch vài tháng là bình thường; đây không phải thang đánh giá. Nếu anh/chị lo về mốc phát triển của bé, hỏi bác sĩ nhi thay vì dựa vào app.')
+    + '</p>';
   document.getElementById("main").innerHTML = h;
 }
 
@@ -348,6 +401,9 @@ function go(d){ if(d<0||d>=N) return; view="day"; current=d; renderAll(); window
 function renderAll(){ renderTop(); if(view==="day") renderDay(); else if(view==="coach") renderCoach(); else renderSum(); }
 function msg(t){ var m=document.getElementById("msg"); if(m) m.textContent=t; }
 
+document.getElementById("kids").addEventListener("click", function(e){
+  var b = e.target.closest(".kid"); if(b) switchKid(b.getAttribute("data-kid"));
+});
 document.getElementById("weeks").addEventListener("click", function(e){
   var b = e.target.closest(".wk"); if(!b) return;
   var w = b.getAttribute("data-w");
